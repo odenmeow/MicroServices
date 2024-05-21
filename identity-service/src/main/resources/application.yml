@@ -1,0 +1,52 @@
+server:
+  port: 9898
+
+spring:
+
+  application:
+    name: IDENTITY-SERVICE
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/javatechie
+    username: root
+    password: springboot
+  jpa:
+    hibernate:
+      ddl-auto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL5Dialect
+    properties:
+      hibernate:
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+  cloud:
+    consul:
+      host: localhost  # Consul ?????
+      port: 8500       # Consul ???????? 8500
+      discovery:
+        service-name: IDENTITY-SERVICE
+        enabled: true           # ?? Consul ????
+        register: true          # ????????? Consul
+        prefer-ip-address: true # ?? IP ??????
+        healthCheck:
+          enabled: true  # ??????
+          interval: 10s  # ??????? 10 ?
+          timeout: 5s    # ??????? 5 ?
+
+  config:
+    import: "consul:"  # ?? Consul ??
+  eureka:
+    client:
+      enabled: false  # ?? Eureka ???????? Consul
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health  # ????????
+  endpoint:
+    health:
+      show-details: always  # ????????????
