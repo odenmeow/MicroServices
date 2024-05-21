@@ -1,0 +1,6 @@
+rootProject.name = 'MicroServices'
+include 'identity-service'
+include 'restaurant-service'
+include 'swiggy-app'
+include 'swiggy-gateway'
+include 'swiggy-service-registry'

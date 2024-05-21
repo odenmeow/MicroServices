@@ -1,5 +1,23 @@
+server:
+  port: 8080  # 設置 Gateway 的運行端口
+
 spring:
+  application:
+    name: SWIGGY-GATEWAY  # 設置應用程序名稱為 SWIGGY-GATEWAY
   cloud:
+    consul:
+      host: localhost  # Consul 的主機地址
+      port: 8500       # Consul 的端口號，默認為 8500
+      discovery:
+        service-name: SWIGGY-GATEWAY
+        enabled: true           # 啟用 Consul 發現功能
+        register: true          # 將此應用程序註冊到 Consul
+        prefer-ip-address: true # 使用 IP 地址註冊服務
+        healthCheck:
+          enabled: true  # 啟用健康檢查
+          interval: 10s  # 健康檢查間隔為 10 秒
+          timeout: 5s    # 健康檢查超時為 5 秒
+
     gateway:
       routes:
         - id: swiggy-app
@@ -8,31 +26,35 @@ spring:
             - Path=/swiggy/**
           filters:
             - AuthenticationFilter
-          # ????? SWIGGY-APP ?????????? (lb)
-          # ????? /swiggy/** ??????
-          # ?????? AuthenticationFilter ???
+          # 配置路由到 SWIGGY-APP 服務，使用負載均衡器 (lb)
+          # 當路徑匹配 /swiggy/** 時觸發此路由
+          # 使用自定義的 AuthenticationFilter 過濾器
         - id: restaurant-service
           uri: lb://RESTAURANT-SERVICE
           predicates:
             - Path=/restaurant/**
           filters:
             - AuthenticationFilter
-          # ????? RESTAURANT-SERVICE ?????????? (lb)
-          # ????? /restaurant/** ??????
-          # ?????? AuthenticationFilter ???
+          # 配置路由到 RESTAURANT-SERVICE 服務，使用負載均衡器 (lb)
+          # 當路徑匹配 /restaurant/** 時觸發此路由
+          # 使用自定義的 AuthenticationFilter 過濾器
         - id: identity-service
           uri: lb://IDENTITY-SERVICE
           predicates:
             - Path=/auth/**
-          # ????? IDENTITY-SERVICE ?????????? (lb)
-          # ????? /auth/** ??????
-    consul:
-      host: localhost           # Consul ?????????????
-      port: 8500                # Consul ???????? 8500
-      discovery:
-        enabled: true           # ?? Consul ????
-        register: true          # ????????? Consul
-        prefer-ip-address: true # ?? IP ??????
-        health-check-interval: 30s # ???????????? 30 ?
-application:
-  name: SWIGGY-GATEWAY           # ?????????? SWIGGY-GATEWAY
+          # 配置路由到 IDENTITY-SERVICE 服務，使用負載均衡器 (lb)
+          # 當路徑匹配 /auth/** 時觸發此路由
+  config:
+    import: "consul:"  # 導入 Consul 配置
+  eureka:
+    client:
+      enabled: false  # 禁用 Eureka 客戶端，因為使用 Consul
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health  # 暴露健康檢查端點
+  endpoint:
+    health:
+      show-details: always  # 總是顯示健康檢查詳細信息

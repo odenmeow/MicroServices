@@ -2,11 +2,36 @@ server:
   port: 8082
 
 spring:
+  config:
+    import: "consul:"  # 導入 Consul 配置
   application:
-    name: RESTAURANT-SERVICE
+    name: RESTAURANT-SERVICE  # 設置應用程序名稱為 SWIGGY-APP
+  cloud:
+    consul:
+      host: localhost  # Consul 的主機名或 IP 地址
+      port: 8500       # Consul 的端口，請替換為服務管理器中的實際端口
+      discovery:
+        service-name: RESTAURANT-SERVICE  # 在 Consul 中註冊的服務名稱
+        enabled: true  # 啟用 Consul 發現功能
+        register: true  # 將此應用程序註冊到 Consul
+        prefer-ip-address: true  # 使用 IP 地址註冊服務
+        healthCheck:
+          enabled: true  # 啟用健康檢查
+          interval: 10s  # 健康檢查間隔為 10 秒
+          timeout: 5s  # 健康檢查超時為 5 秒
+    config:
+      enabled: true  # 啟用 Consul 配置
+      import-check:
+        enabled: false  # 禁用導入檢查
+eureka:
+  client:
+    enabled: false  # 禁用 Eureka 客戶端，因為使用 Consul
 
-spring.cloud.consul:
-  host: localhost            # Consul ??????? IP ??
-  port: 8500                 # Consul ????????? 8500
-  discovery:
-    service-name: RESTAURANT-SERVICE  # ? Consul ????????
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health  # 暴露健康檢查端點
+  endpoint:
+    health:
+      
