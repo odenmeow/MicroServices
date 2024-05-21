@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: swiggy-app
+    name: SWIGGY-APP
 
 spring.cloud.consul:
   host: localhost  # Consul ????? IP ??
