@@ -1,7 +1,7 @@
-package com.example.service;
+package com.example.restaurantservice.service;
 
-import com.example.dao.RestaurantOrderDAO;
-import com.example.dto.OrderResponseDTO;
+import com.example.restaurantservice.dao.RestaurantOrderDAO;
+import com.example.restaurantservice.dto.OrderResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

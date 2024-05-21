@@ -1,0 +1,12 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: RESTAURANT-SERVICE
+
+spring.cloud.consul:
+  host: localhost            # Consul ??????? IP ??
+  port: 8500                 # Consul ????????? 8500
+  discovery:
+    service-name: RESTAURANT-SERVICE  # ? Consul ????????

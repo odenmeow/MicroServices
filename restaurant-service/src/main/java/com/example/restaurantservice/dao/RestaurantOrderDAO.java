@@ -1,7 +1,7 @@
-package com.example.dao;
+package com.example.restaurantservice.dao;
 
 
-import com.example.dto.OrderResponseDTO;
+import com.example.restaurantservice.dto.OrderResponseDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
