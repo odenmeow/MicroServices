@@ -1,6 +1,6 @@
-package com.example.client;
+package com.example.swiggyapp.client;
 
-import com.example.dto.OrderResponseDTO;
+import com.example.swiggyapp.dto.OrderResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

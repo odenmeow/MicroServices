@@ -1,7 +1,7 @@
-package com.example.service;
+package com.example.swiggyapp.service;
 
-import com.example.client.RestaurantServiceClient;
-import com.example.dto.OrderResponseDTO;
+import com.example.swiggyapp.client.RestaurantServiceClient;
+import com.example.swiggyapp.dto.OrderResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
