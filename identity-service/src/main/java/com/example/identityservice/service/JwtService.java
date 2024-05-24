@@ -19,6 +19,7 @@ public class JwtService {
 
 
     public void validateToken(final String token) {
+        // Return void ， 實際上透過 拋錯誤 判斷 T / F。
         Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
     }
 

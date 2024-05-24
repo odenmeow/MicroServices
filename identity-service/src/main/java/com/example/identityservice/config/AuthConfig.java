@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,7 +36,8 @@ public class AuthConfig {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/atuh/token", "/auth/validate").permitAll()
+                        .requestMatchers("/auth/register", "/auth/token", "/auth/validate").permitAll()
+                        // 像我打錯了 auth 打成 atuh 就得到403
                         // 下面這個是 for Consul 的健康檢查使用，否則全部403都不能訪問= =
                         .requestMatchers("/actuator/health").permitAll()
                         .anyRequest().authenticated()
@@ -54,5 +57,12 @@ public class AuthConfig {
         return config.getAuthenticationManager();
     }
 
+    @Bean
+    public AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(customUserDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
+    }
 
 }
