@@ -44,6 +44,8 @@ spring:
             - Path=/auth/**
           # 配置路由到 IDENTITY-SERVICE 服務，使用負載均衡器 (lb)
           # 當路徑匹配 /auth/** 時觸發此路由
+          # 入口點 (註冊 帳密)、專門用來 驗證與 簽發 JWT
+          # 此處不需要 Filter 過濾 有沒有 JWT、合格不。
   config:
     import: "consul:"  # 導入 Consul 配置
   eureka:
