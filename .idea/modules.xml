@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/identity-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/identity-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/restaurant-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/restaurant-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/swiggy-app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/swiggy-app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/swiggy-gateway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/swiggy-gateway.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/identity-service/MicroServices.identity-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/identity-service/MicroServices.identity-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/restaurant-service/MicroServices.restaurant-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/restaurant-service/MicroServices.restaurant-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/swiggy-app/MicroServices.swiggy-app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/swiggy-app/MicroServices.swiggy-app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/swiggy-gateway/MicroServices.swiggy-gateway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/swiggy-gateway/MicroServices.swiggy-gateway.main.iml" />
     </modules>
   </component>
 </project>

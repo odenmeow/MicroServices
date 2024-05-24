@@ -6,12 +6,30 @@
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.32/17d46b3e205515e1e8efd3ee4d57ce8018914163/lombok-1.18.32.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.30/f195ee86e6c896ea47a1d39defbe20eb59cd149d/lombok-1.18.30.jar" />
         </processorPath>
-        <module name="swiggy-gateway.main" />
+        <module name="MicroServices.identity-service.main" />
+        <module name="MicroServices.restaurant-service.main" />
+        <module name="MicroServices.swiggy-app.main" />
+        <module name="MicroServices.swiggy-gateway.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.6">
+    <bytecodeTargetLevel target="17">
+      <module name="com.example.MicroServices" target="17" />
+      <module name="com.example.MicroServices.main" target="17" />
+      <module name="com.example.MicroServices.test" target="17" />
+      <module name="identity-service" target="17" />
+      <module name="identity-service.main" target="17" />
+      <module name="identity-service.test" target="17" />
+      <module name="restaurant-service" target="17" />
+      <module name="restaurant-service.main" target="17" />
+      <module name="restaurant-service.test" target="17" />
+      <module name="swiggy-app" target="17" />
+      <module name="swiggy-app.main" target="17" />
+      <module name="swiggy-app.test" target="17" />
+      <module name="swiggy-gateway" target="17" />
+      <module name="swiggy-gateway.main" target="17" />
+      <module name="swiggy-gateway.test" target="17" />
       <module name="swiggy-service-registry.main" target="17" />
       <module name="swiggy-service-registry.test" target="17" />
     </bytecodeTargetLevel>

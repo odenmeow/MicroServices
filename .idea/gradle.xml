@@ -8,38 +8,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/identity-service" />
-        <option name="modules">
-          <set>
             <option value="$PROJECT_DIR$/identity-service" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/restaurant-service" />
-        <option name="modules">
-          <set>
             <option value="$PROJECT_DIR$/restaurant-service" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/swiggy-app" />
-        <option name="modules">
-          <set>
             <option value="$PROJECT_DIR$/swiggy-app" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/swiggy-gateway" />
-        <option name="modules">
-          <set>
             <option value="$PROJECT_DIR$/swiggy-gateway" />
+            <option value="$PROJECT_DIR$/swiggy-service-registry" />
           </set>
         </option>
       </GradleProjectSettings>
