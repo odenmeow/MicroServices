@@ -1,10 +1,16 @@
 package com.example.identityservice.config;
 
+import com.example.identityservice.entity.Role;
 import com.example.identityservice.entity.UserCredential;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 
 public class CustomUserDetails implements UserDetails {
@@ -12,15 +18,18 @@ public class CustomUserDetails implements UserDetails {
     private String username;
     private String password;
 
+    private List<GrantedAuthority> authorityList;
+
 
     public CustomUserDetails(UserCredential userCredential) {
         this.username = userCredential.getEmail();
         this.password = userCredential.getPassword();
+        this.authorityList = convertToAuthorities(userCredential.getRoles());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorityList;
     }
 
     @Override
@@ -51,5 +60,14 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    private List<GrantedAuthority> convertToAuthorities(List<Role> roles){
+        List<GrantedAuthority> list = new ArrayList<>();
+        for ( var r : roles){
+            list.add(new SimpleGrantedAuthority(r.getName()));
+        }
+        return list;
+
     }
 }

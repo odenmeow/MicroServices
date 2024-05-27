@@ -1,12 +1,13 @@
 package com.example.identityservice.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -20,4 +21,13 @@ public class UserCredential {
     private String name;
     private String email;
     private String password;
+
+    @ManyToMany
+    @JoinTable(
+            name = "User_Credential_Role_Mapping",
+            joinColumns = @JoinColumn(name = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "roleid")
+    )
+    //@JsonBackReference 搭配對面 @JsonManagedReference
+    private List<Role> roles;
 }

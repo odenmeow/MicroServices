@@ -1,5 +1,8 @@
 package com.example.identityservice.config;
 
+import com.example.identityservice.filter.AuthenticationLoggerFilter;
+import com.example.identityservice.filter.JwtAuthorizationFilter;
+import com.example.identityservice.filter.MyFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,12 +12,15 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class AuthConfig {
 
 //    作者似乎 重複註冊了 不知道在幹嘛= =
@@ -35,13 +41,23 @@ public class AuthConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 禁用會話管理
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/register", "/auth/token", "/auth/validate").permitAll()
                         // 像我打錯了 auth 打成 atuh 就得到403
                         // 下面這個是 for Consul 的健康檢查使用，否則全部403都不能訪問= =
                         .requestMatchers("/actuator/health").permitAll()
+//                        .requestMatchers("/auth/check/roles/**").permitAll()
+                        .requestMatchers("/auth/addRole/**").permitAll()
+                        // 讓錯誤印出 而不是僅僅403
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(new MyFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new AuthenticationLoggerFilter(), SecurityContextHolderAwareRequestFilter.class)
+                // 下面這個是帳號密碼的驗證，如果 authenticated就要認帳密，JWT 會被禁止，無法通過
                 .userDetailsService(customUserDetailsService).build();
 
     }

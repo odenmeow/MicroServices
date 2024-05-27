@@ -4,9 +4,11 @@ import com.example.restaurantservice.config.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
 import java.util.ArrayList;
@@ -15,8 +17,10 @@ import java.util.List;
 
 
 public class JwtAuthorizationFilter extends AbstractPreAuthenticatedProcessingFilter {
-
-
+    public JwtAuthorizationFilter(){
+        // 空的操作，什麼都不做 :D。
+        setAuthenticationManager(authentication -> authentication);
+    }
     @Override // 簡單取得 header jwt 就好，使用這個。 返回 代表用戶的 Principal 對象
     protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
@@ -27,11 +31,14 @@ public class JwtAuthorizationFilter extends AbstractPreAuthenticatedProcessingFi
                     (List<String>) claims.get("roles") : Collections.emptyList();
 
                 // 假的 提供 給 spring，僅 (身份) 、 ( username == email 或稱 principal)
-                return new UsernamePasswordAuthenticationToken(
-                        claims.getSubject(),
-                        null, // 不須密碼
-                        convertToAuthorities(roles) // 我只想要權限
-                );
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(
+                                claims.getSubject(),
+                                null, // 不須密碼
+                                convertToAuthorities(roles) // 我只想要權限
+                        );
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                return  authenticationToken;
 
             }catch (Exception e){
                 e.printStackTrace();

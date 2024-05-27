@@ -1,9 +1,12 @@
 package com.example.restaurantservice.config;
 
 import com.example.restaurantservice.filter.JwtAuthorizationFilter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -29,7 +32,7 @@ public class AuthConfig {
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
                         .configurationSource(createCorsConfig()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/orders/status/{orderId}").hasRole("NORMAL")
+                        .requestMatchers(HttpMethod.GET, "/orders/status/{orderId}").authenticated()
                         .requestMatchers("/order").permitAll()
                         .anyRequest().denyAll()
                 )

@@ -7,16 +7,18 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Date;
 
 @Component
 public class JwtUtil {
 
 
-    public static final String SECRET = "53GAB66B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    public static final String SECRET = "AAAAAA6B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
 
     public void validateToken(final String token) {
         Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
+        System.out.println("Gateway JWT pass!! "+ new Date().toString());
     }
 
 
