@@ -2,64 +2,80 @@ package com.example.restaurantservice.filter;
 
 import com.example.restaurantservice.config.JwtUtil;
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 
 public class JwtAuthorizationFilter extends AbstractPreAuthenticatedProcessingFilter {
-    public JwtAuthorizationFilter(){
+
+    private JwtUtil jwtService = new JwtUtil();
+
+    public JwtAuthorizationFilter() {
         // 空的操作，什麼都不做 :D。
         setAuthenticationManager(authentication -> authentication);
     }
-    @Override // 簡單取得 header jwt 就好，使用這個。 返回 代表用戶的 Principal 對象
+
+    @Override
     protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
+
         if (token != null && token.startsWith("Bearer ")) {
-            Claims claims = JwtUtil.extractClaims(token.substring(7));
-            try{
-                List<String> roles = claims.containsKey("roles") ?
-                    (List<String>) claims.get("roles") : Collections.emptyList();
-
-                // 假的 提供 給 spring，僅 (身份) 、 ( username == email 或稱 principal)
-                UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(
-                                claims.getSubject(),
-                                null, // 不須密碼
-                                convertToAuthorities(roles) // 我只想要權限
-                        );
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                return  authenticationToken;
-
-            }catch (Exception e){
-                e.printStackTrace();
-                System.out.println("roles 物件 無法轉換為 List<String>");
-            }
+            System.out.println("JWTFILTER:印出....有jwt" +
+                    new Date() +
+                    request.getRequestURI());
+            System.out.flush();
+            Claims claims = jwtService.extractClaims(token.substring(7));
+            return claims.getSubject(); // 返回主體，即用戶名或用戶ID
         }
+
         return null;
     }
 
-    @Override // 取得 證書(Oauth之類、密碼、其他種令牌，以複雜方式自訂議提取)
+    @Override
     protected Object getPreAuthenticatedCredentials(HttpServletRequest request) {
-        return null;
+        return null; // 在預認證場景中，通常不需要額外的憑證
     }
 
-    private List<GrantedAuthority> convertToAuthorities(List<String> roles){
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, Authentication authResult) throws IOException, ServletException {
+        // 從 Authentication 提取訊息 (使用預設<如果沒token>)。
+        PreAuthenticatedAuthenticationToken authenticationToken = (PreAuthenticatedAuthenticationToken) authResult;
+        String token = request.getHeader("Authorization");
+
+        System.out.println("印出"+request.getRemoteHost());
+        if (token != null && token.startsWith("Bearer ")) {
+            Claims claims = jwtService.extractClaims(token.substring(7));
+            List<GrantedAuthority> authorities = convertToAuthorities(claims);
+            authenticationToken = new PreAuthenticatedAuthenticationToken(claims.getSubject(), null, authorities);
+            authenticationToken.setAuthenticated(true);
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        }
+
+        super.successfulAuthentication(request, response, authenticationToken);
+    }
+
+    private List<GrantedAuthority> convertToAuthorities(Claims claims) {
+        Object rolesObject = claims.getOrDefault("roles", Collections.emptyList());
+        List<Map<String, String>> roles = rolesObject instanceof List ?
+                (List<Map<String, String>>) rolesObject : Collections.emptyList();
+
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for ( var role : roles){
-            authorities.add(new SimpleGrantedAuthority(role));
+        for (Map<String, String> role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.get("authority")));
         }
         return authorities;
     }
-
-
 }

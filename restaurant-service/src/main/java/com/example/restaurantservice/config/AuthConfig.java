@@ -1,6 +1,8 @@
 package com.example.restaurantservice.config;
 
+import com.example.restaurantservice.filter.AuthenticationLoggerFilter;
 import com.example.restaurantservice.filter.JwtAuthorizationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -19,7 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = false)
 public class AuthConfig {
 
     @Bean
@@ -32,17 +35,19 @@ public class AuthConfig {
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
                         .configurationSource(createCorsConfig()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/orders/status/{orderId}").authenticated()
-                        .requestMatchers("/order").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/restaurant/orders/status/*").hasRole("VIP")
+                        .requestMatchers("/restaurant/orders").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new AuthenticationLoggerFilter(), SecurityContextHolderAwareRequestFilter.class)
                 .build();
     }
 
     private CorsConfigurationSource createCorsConfig(){
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3306"));
+        config.setAllowedOrigins(List.of("*"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("*"));
         config.setAllowCredentials(true);

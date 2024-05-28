@@ -26,4 +26,9 @@ public class RestaurantController {
     public OrderResponseDTO getOrder(@PathVariable String orderId) {
         return service.getOrder(orderId);
     }
+
+    @GetMapping("/orders")
+    public String getOrders(){
+        return "訂單S";
+    }
 }

@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class AuthConfig {
 
 //    作者似乎 重複註冊了 不知道在幹嘛= =
@@ -56,7 +56,7 @@ public class AuthConfig {
                 )
                 .addFilterBefore(new MyFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new AuthenticationLoggerFilter(), SecurityContextHolderAwareRequestFilter.class)
+//                .addFilterAfter(new AuthenticationLoggerFilter(), SecurityContextHolderAwareRequestFilter.class)
                 // 下面這個是帳號密碼的驗證，如果 authenticated就要認帳密，JWT 會被禁止，無法通過
                 .userDetailsService(customUserDetailsService).build();
 
