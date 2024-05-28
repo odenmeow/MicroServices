@@ -1,65 +1,66 @@
 server:
-  port: 9898
+  port: 9898  # 設定伺服器運行的端口
 
   error:
-    include-message: always
-    include-binding-errors: always
-    include-exception: true
-    include-stacktrace: always
+    include-message: always  # 總是包含錯誤消息
+    include-binding-errors: always  # 總是包含綁定錯誤
+    include-exception: true  # 包含異常
+    include-stacktrace: always  # 總是包含堆棧跟蹤
 
 spring:
-
   application:
-    name: IDENTITY-SERVICE
+    name: IDENTITY-SERVICE  # 設定應用名稱
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/javatechie
-    username: root
-    password: springboot
+    driver-class-name: com.mysql.cj.jdbc.Driver  # 設定資料庫驅動
+    url: jdbc:mysql://localhost:3306/javatechie  # 設定資料庫URL
+    username: root  # 設定資料庫用戶名
+    password: springboot  # 設定資料庫密碼
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: update  # Hibernate自動更新數據庫模式
       properties:
         hibernate:
-          dialect: org.hibernate.dialect.MySQL5Dialect
+          dialect: org.hibernate.dialect.MySQL5Dialect  # 設定方言
     properties:
       hibernate:
         naming:
-          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl  # 設定命名策略
 
   cloud:
     consul:
-      host: localhost  # Consul ?????
-      port: 8500       # Consul ???????? 8500
+      host: localhost  # 設定Consul的主機地址
+      port: 8500  # 設定Consul的端口號
       discovery:
-        service-name: IDENTITY-SERVICE
-        enabled: true           # ?? Consul ????
-        register: true          # ????????? Consul
-        prefer-ip-address: true # ?? IP ??????
+        service-name: IDENTITY-SERVICE  # 設定服務名稱
+        enabled: true  # 啟用Consul發現
+        register: true  # 註冊到Consul
+        prefer-ip-address: true  # 使用IP地址註冊
         healthCheck:
-          enabled: true  # ??????
-          interval: 10s  # ??????? 10 ?
-          timeout: 5s    # ??????? 5 ?
+          enabled: true  # 啟用健康檢查
+          interval: 10s  # 健康檢查間隔
+          timeout: 5s  # 健康檢查超時
 
   config:
-    import: "consul:"  # ?? Consul ??
+    import: "consul:"  # 從Consul導入配置
+
   eureka:
     client:
-      enabled: false  # ?? Eureka ???????? Consul
+      enabled: false  # 停用Eureka
 
 management:
   endpoints:
     web:
       exposure:
-        include: health  # ????????
+        include: health  # 包含健康檢查端點
   endpoint:
     health:
-      show-details: always  # ????????????
+      show-details: always  # 總是顯示健康檢查詳情
 
 security:
   whitelist:
-    - /auth/register
+    - /auth/register  # 白名單路徑
     - /auth/token
     - /auth/validate
     - /actuator/health
@@ -70,14 +71,14 @@ security:
     - path: /auth/vipCanOrder
       methods:
         - method: POST
-          anyRole: ["VIP"]
+          anyRole: ["VIP"]  # 需要VIP角色
     - path: /auth/bothCanOrder
       methods:
         - method: POST
-          anyRole: [ "VIP", "NORMAL" ]
+          anyRole: [ "VIP", "NORMAL" ]  # 需要VIP或NORMAL角色
     - path: /some/other/path/**
       methods:
         - method: GET
-          anyRole: ["NORMAL"]
+          anyRole: ["NORMAL"]  # 需要NORMAL角色
         - method: POST
-          anyRole: ["VIP"]
+          anyRole: ["VIP"]  # 需要VIP角色
