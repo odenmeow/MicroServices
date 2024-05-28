@@ -114,4 +114,14 @@ public class AuthController {
         return "Token is valid";
     }
 
+    @PostMapping("/vipCanOrder")
+    public String vipCanOrder(){
+        return "確實 vip 才可以訂購";
+    }@PostMapping("/bothCanOrder")
+    public String bothCanOrder(){
+        return "Normal、VIP 都可以訂";
+    }
+
+
+
 }

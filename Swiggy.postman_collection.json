@@ -1,0 +1,527 @@
+{
+	"info": {
+		"_postman_id": "07fcbb9d-0c7d-4e5d-9370-469b898a1328",
+		"name": "Swiggy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33517504"
+	},
+	"item": [
+		{
+			"name": "1. order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvbmkiLCJpYXQiOjE3MTY1MjQ4MzgsImV4cCI6MTcxNjUyNjYzOH0.Bxq37BvdsKuFarS1IMJZV4unPURH7AmgCHacRiHEC6U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/swiggy/37jbd832",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"swiggy",
+						"37jbd832"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.從餐廳",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/restaurant/order/status/37jbd832",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"order",
+						"status",
+						"37jbd832"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. 註冊帳號",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"oni2\",\r\n    \"email\" : \"oni2@gmail.com\",\r\n    \"password\" : \"oni123\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. 手動取得登入token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"oni@gmail.com\",\r\n    // \"email\" : \"oni@gmail.com\",\r\n    \"password\" : \"oni123\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. 手動驗證 JWT  (有Filter authorize也要放入",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvbmlAZ21haWwuY29tIiwiaWF0IjoxNzE2Nzk3Mzk3LCJleHAiOjE3MTY3OTkxOTd9.D4rNrXAvd5Sz0p_KJ1WAp-kTGkM8atQYoLwo2c_Af78",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"oni\",\r\n    // \"email\" : \"oni@gmail.com\",\r\n    \"password\" : \"oni123\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/validate?token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvbmlAZ21haWwuY29tIiwiaWF0IjoxNzE2Nzk3Mzk3LCJleHAiOjE3MTY3OTkxOTd9.D4rNrXAvd5Sz0p_KJ1WAp-kTGkM8atQYoLwo2c_Af78",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"validate"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvbmlAZ21haWwuY29tIiwiaWF0IjoxNzE2Nzk3Mzk3LCJleHAiOjE3MTY3OTkxOTd9.D4rNrXAvd5Sz0p_KJ1WAp-kTGkM8atQYoLwo2c_Af78"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. 手動驗證 JWT Copy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvbmlAZ21haWwuY29tIiwiaWF0IjoxNzE2Nzk4MDUxLCJleHAiOjE3MTY3OTk4NTF9._DGV32_l85WYOe-Q9zrNM836pMF6VUSviwxswtxmq38",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"oni\",\r\n    // \"email\" : \"oni@gmail.com\",\r\n    \"password\" : \"oni123\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/order/status/37jbd832",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"order",
+						"status",
+						"37jbd832"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. AddRole (VIP)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9WSVAifSx7ImF1dGhvcml0eSI6IlJPTEVfVklQIn1dLCJzdWIiOiJvbmlAZ21haWwuY29tIiwiaWF0IjoxNzE2ODU4OTU5LCJleHAiOjE3MTY4NjA3NTl9.c7VLSg1KKaSN0VeIRURVEslL9PN0yrG5fihxFUTFfMI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"oni@gmail.com\",\r\n    \"password\":\"oni123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/addRole/ROLE_VIP/vip777",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"addRole",
+						"ROLE_VIP",
+						"vip777"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7-2. AddRole (NORMAL) Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W10sInN1YiI6Im9uaUBnbWFpbC5jb20iLCJpYXQiOjE3MTY4Nzc0ODEsImV4cCI6MTcxNjg3OTI4MX0.Wed3o825G81xRk3gVf5cIlXqcCRvy8vwLOmcO2gA84o",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"oni@gmail.com\",\r\n    \"password\":\"oni123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/addRole/ROLE_NORMAL/vip777",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"addRole",
+						"ROLE_NORMAL",
+						"vip777"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7-3.  renew token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"oni@gmail.com\",\r\n    // \"email\" : \"oni@gmail.com\",\r\n    \"password\" : \"oni123\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7-4. checkRole",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9WSVAifV0sInN1YiI6Im9uaUBnbWFpbC5jb20iLCJpYXQiOjE3MTY4MDY0MzcsImV4cCI6MTcxNjgwODIzN30.BBDdaEwIbo0u2WtzqhWkNKmiMDDf21tFWVSC1fyjOtM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/auth/check/roles/oni@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"check",
+						"roles",
+						"oni@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7-5. checkRole by authentication",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9OT1JNQUwifV0sInN1YiI6Im9uaUBnbWFpbC5jb20iLCJpYXQiOjE3MTY4NzkzNzYsImV4cCI6MTcxNjg4MTE3Nn0.zdx875-mRmAsay_UaOvsTdf7ZCHgNj6vC0EloR1Wu9U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Origin",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/auth/check/roles/oni@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"check",
+						"roles",
+						"oni@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8.從餐廳 VIP Authentication",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9WSVAifV0sInN1YiI6Im9uaUBnbWFpbC5jb20iLCJpYXQiOjE3MTY4NjUzMDAsImV4cCI6MTcxNjg2NzEwMH0.oLd1kpENl8nfW3jBNn50KiGKcKft2AAbPBlnDCbDtZI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/restaurant/orders/status/37jbd832",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"orders",
+						"status",
+						"37jbd832"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8.從餐廳 get Orders",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9WSVAifV0sInN1YiI6Im9uaUBnbWFpbC5jb20iLCJpYXQiOjE3MTY4NjUzMDAsImV4cCI6MTcxNjg2NzEwMH0.oLd1kpENl8nfW3jBNn50KiGKcKft2AAbPBlnDCbDtZI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/restaurant/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9. vipcanorder",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9OT1JNQUwifV0sInN1YiI6Im9uaUBnbWFpbC5jb20iLCJpYXQiOjE3MTY4NzkzNzYsImV4cCI6MTcxNjg4MTE3Nn0.zdx875-mRmAsay_UaOvsTdf7ZCHgNj6vC0EloR1Wu9U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/auth/vipCanOrder",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"vipCanOrder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9. bothcanorder Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9OT1JNQUwifV0sInN1YiI6Im9uaUBnbWFpbC5jb20iLCJpYXQiOjE3MTY4NzkzNzYsImV4cCI6MTcxNjg4MTE3Nn0.zdx875-mRmAsay_UaOvsTdf7ZCHgNj6vC0EloR1Wu9U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/auth/bothCanOrder",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"bothCanOrder"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

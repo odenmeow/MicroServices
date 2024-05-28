@@ -3,9 +3,11 @@ package com.example.identityservice.config;
 import com.example.identityservice.filter.AuthenticationLoggerFilter;
 import com.example.identityservice.filter.JwtAuthorizationFilter;
 import com.example.identityservice.filter.MyFilter;
+import org.apache.catalina.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -18,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
+
+import java.sql.SQLOutput;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -34,8 +39,17 @@ public class AuthConfig {
 //        return new CustomUserDetailsService();
 //    }
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+
+    private final SecurityConfigProperties securityConfigProperties;
+
+    private final CustomUserDetailsService customUserDetailsService;
+
+
+    public AuthConfig(SecurityConfigProperties securityConfigProperties,
+                          CustomUserDetailsService customUserDetailsService){
+        this.securityConfigProperties = securityConfigProperties;
+        this.customUserDetailsService = customUserDetailsService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -43,17 +57,41 @@ public class AuthConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 禁用會話管理
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/auth/token", "/auth/validate").permitAll()
-                        // 像我打錯了 auth 打成 atuh 就得到403
-                        // 下面這個是 for Consul 的健康檢查使用，否則全部403都不能訪問= =
-                        .requestMatchers("/actuator/health").permitAll()
-//                        .requestMatchers("/auth/check/roles/**").permitAll()
-                        .requestMatchers("/auth/addRole/**").permitAll()
-                        // 讓錯誤印出 而不是僅僅403
-                        .requestMatchers("/error").permitAll()
-                        .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(auth -> {
+                    // 設置白名單
+                    for (String path : securityConfigProperties.getWhiteList()){
+                        auth.requestMatchers(path).permitAll();
+                    }
+                    // 角色 - API 映射
+                    // 設置角色映射路由和方法
+                    for (SecurityConfigProperties.RoleMapping roleMapping : securityConfigProperties.getRoleMappings()) {
+                        for (SecurityConfigProperties.RoleMapping.MethodRoles methodRole : roleMapping.getMethods()) {
+                            System.out.println("URL" + roleMapping.getPath());
+                            if (!methodRole.getAnyRole().isEmpty()) {
+                                String[] rolesArray = methodRole.getAnyRole().toArray(new String[0]);
+                                System.out.println("任何ROLE : " + Arrays.toString(rolesArray));
+                                auth.requestMatchers(
+                                        HttpMethod.valueOf(methodRole.getMethod()),
+                                        roleMapping.getPath()
+                                        ).hasAnyRole(rolesArray);
+                            }
+                            if (!methodRole.getMatchAllRoles().isEmpty()) {
+                                String[] rolesArray = methodRole.getMatchAllRoles().toArray(new String[0]);
+                                System.out.println("All Match : " + Arrays.toString(rolesArray));
+                                for (String role : methodRole.getMatchAllRoles()){
+                                    auth.requestMatchers(
+                                            HttpMethod.valueOf(methodRole.getMethod()),
+                                            roleMapping.getPath()
+                                    ).hasRole(role);
+                                }
+                            }
+                        }
+                    }
+
+                    // 其他所有路由都需要認證
+                    auth.anyRequest().authenticated();
+
+                })
                 .addFilterBefore(new MyFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 //                .addFilterAfter(new AuthenticationLoggerFilter(), SecurityContextHolderAwareRequestFilter.class)

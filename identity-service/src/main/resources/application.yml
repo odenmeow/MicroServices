@@ -57,3 +57,27 @@ management:
     health:
       show-details: always  # ????????????
 
+security:
+  whitelist:
+    - /auth/register
+    - /auth/token
+    - /auth/validate
+    - /actuator/health
+    - /error
+    - /auth/addRole/**
+    - /
+  roleMappings:
+    - path: /auth/vipCanOrder
+      methods:
+        - method: POST
+          anyRole: ["VIP"]
+    - path: /auth/bothCanOrder
+      methods:
+        - method: POST
+          anyRole: [ "VIP", "NORMAL" ]
+    - path: /some/other/path/**
+      methods:
+        - method: GET
+          anyRole: ["NORMAL"]
+        - method: POST
+          anyRole: ["VIP"]
